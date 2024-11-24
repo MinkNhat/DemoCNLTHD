@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from courses import serializers, paginators
-from courses.models import Category, Course, Lesson
+from courses.models import Category, Course, Lesson, User
 from rest_framework.decorators import action
 
 
@@ -44,3 +44,9 @@ class LessonViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
         comments = self.get_object().comment_set.select_related('user').filter(active=True)
 
         return Response(serializers.LessonSerializer(comments, many=True).data)
+
+
+class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
+    queryset = User.objects.filter(is_active=True)
+    serializer_class = serializers.UserSerializer
+
